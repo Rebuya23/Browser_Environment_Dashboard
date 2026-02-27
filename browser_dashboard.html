@@ -118,9 +118,9 @@ Date: Feb 27, 2026
         }
     }
 
-    / PART D: Automatic background color base sa screen width
+   // PART D: Background color base sa actual screen width
 function applyBackgroundColor() {
-    const width = window.innerWidth;
+    const width = screen.width; // <-- dito pinalitan from window.innerWidth
 
     if (width < 600) {
         document.body.style.backgroundColor = "blue"; // Mobile
@@ -133,14 +133,11 @@ function applyBackgroundColor() {
 
 // Run on load and resize
 applyBackgroundColor();
-window.addEventListener("resize", applyBackgroundColor);
-
-    // Apply on load and resize
-    applyBackgroundColor();
-    window.addEventListener("resize", applyBackgroundColor);
+window.addEventListener("resize", applyBackgroundColor)
 </script>
 
 </body>
 
 </html>
+
 
