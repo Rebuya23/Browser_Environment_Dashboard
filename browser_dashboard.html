@@ -118,18 +118,22 @@ Date: Feb 27, 2026
         }
     }
 
-    /* PART D: Dynamic Background Styling */
-    function applyBackgroundColor() {
-        const width = window.innerWidth;
+    / PART D: Automatic background color base sa screen width
+function applyBackgroundColor() {
+    const width = window.innerWidth;
 
-        if (width < 600) {
-            document.body.style.backgroundColor = "blue";
-        } else if (width >= 600 && width <= 991) {
-            document.body.style.backgroundColor = "green";
-        } else {
-            document.body.style.backgroundColor = "orange";
-        }
+    if (width < 600) {
+        document.body.style.backgroundColor = "blue"; // Mobile
+    } else if (width <= 991) {
+        document.body.style.backgroundColor = "green"; // Tablet
+    } else {
+        document.body.style.backgroundColor = "orange"; // Desktop
     }
+}
+
+// Run on load and resize
+applyBackgroundColor();
+window.addEventListener("resize", applyBackgroundColor);
 
     // Apply on load and resize
     applyBackgroundColor();
@@ -139,3 +143,4 @@ Date: Feb 27, 2026
 </body>
 
 </html>
+
