@@ -1,0 +1,140 @@
+<!--
+README
+Title: Browser Environment Dashboard
+Description:
+This webpage demonstrates the use of JavaScript Browser Objects such as
+navigator, screen, location, history, document, and window to display
+browser information, page details, navigation controls, and dynamic styling.
+Author: (Your Name)
+Date: (Submission Date)
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Browser Environment Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #222;
+            color: #fff;
+            padding: 15px;
+        }
+
+        header h2 {
+            margin: 0;
+        }
+
+        section {
+            padding: 15px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        button {
+            margin: 5px 0;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .info-box span {
+            display: block;
+            margin: 4px 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- PART 0: PROFILE INFORMATION -->
+<header>
+    <h2>Student Profile</h2>
+    <p>
+        <strong>Complete Name:</strong> Aljomar M. Rebuya<br>
+        <strong>Sex:</strong> Male<br>
+        <strong>Address:</strong> Zone 2, Agpo, Lagonoy Camarines Sur<br>
+        <strong>Course, Year, and Section: BSIT-</strong>2D<br>
+        <strong>Name of School:</strong> Partido State University<br>
+        <strong>Semester & AY:</strong> 2nd Semester, AY 2025–2026<br>
+        <strong>Subject Code and Title</Title>:</strong> PF2 Event Driven Programming<br>
+        <strong>Instructor:</strong> Arjay F. Abio
+    </p>
+</header>
+
+<!-- PART A: BROWSER INFORMATION -->
+<section>
+    <h3>Part A: Browser Information</h3>
+    <div class="info-box" id="browserInfo"></div>
+</section>
+
+<!-- PART B: PAGE INFORMATION -->
+<section>
+    <h3>Part B: Page Information & Controls</h3>
+    <div class="info-box" id="pageInfo"></div>
+    <button onclick="changeTitle()">Change Page Title</button>
+</section>
+
+<!-- PART C: NAVIGATION CONTROLS -->
+<section>
+    <h3>Part C: Navigation Controls</h3>
+    <button onclick="location.reload()">Reload Page</button>
+    <button onclick="location.href='https://www.example.com'">Go to Example.com</button>
+    <button onclick="history.back()">Back</button>
+    <button onclick="history.forward()">Forward</button>
+</section>
+
+<script>
+    /* PART A: Display Browser & Screen Information */
+    const browserInfo = document.getElementById("browserInfo");
+    browserInfo.innerHTML = `
+        <span><strong>Browser:</strong> ${navigator.appName} ${navigator.appVersion}</span>
+        <span><strong>Platform (OS):</strong> ${navigator.platform}</span>
+        <span><strong>Java Enabled:</strong> ${navigator.javaEnabled()}</span>
+        <span><strong>Screen Resolution:</strong> ${screen.width} x ${screen.height}</span>
+        <span><strong>Available Screen Size:</strong> ${screen.availWidth} x ${screen.availHeight}</span>
+        <span><strong>Color Depth:</strong> ${screen.colorDepth}</span>
+    `;
+
+    /* PART B: Page Information */
+    const pageInfo = document.getElementById("pageInfo");
+    function updatePageInfo() {
+        pageInfo.innerHTML = `
+            <span><strong>Current URL:</strong> ${location.href}</span>
+            <span><strong>Hostname:</strong> ${location.hostname}</span>
+            <span><strong>Page Title:</strong> ${document.title}</span>
+        `;
+    }
+    updatePageInfo();
+
+    function changeTitle() {
+        const newTitle = prompt("Enter new page title:");
+        if (newTitle) {
+            document.title = newTitle;
+            updatePageInfo();
+        }
+    }
+
+    /* PART D: Dynamic Background Styling */
+    function applyBackgroundColor() {
+        const width = window.innerWidth;
+
+        if (width < 600) {
+            document.body.style.backgroundColor = "blue";
+        } else if (width >= 600 && width <= 991) {
+            document.body.style.backgroundColor = "green";
+        } else {
+            document.body.style.backgroundColor = "orange";
+        }
+    }
+
+    // Apply on load and resize
+    applyBackgroundColor();
+    window.addEventListener("resize", applyBackgroundColor);
+</script>
+
+</body>
+</html>
