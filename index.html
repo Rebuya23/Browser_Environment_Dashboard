@@ -3,73 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>Student Homepage</title>
-    <style>
-        body {
-    font-family: Arial, sans-serif;
-    font-size: 16px; /* readable sa mobile */
-    line-height: 1.5;
-    padding: 10px; 
-}
-a {
-    display: block; /* para clickable sa buong row */
-    margin: 5px 0;
-}
-section {
-    max-width: 800px;
-    margin: auto;
-}
-header {
-            background: #f0f0f0;
-            padding: 15px;
-            border-radius: 5px;
-        }
+ <style>
+    body {
+        margin: 0;
+        padding: 10px;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        background-color: #f0f0f0; /* light background para comfortable */
+        color: #333;
+    }
 
-        ul {
-            margin-top: 15px;
-        }
+    header, section {
+        width: 100%;  /* full width sa mobile */
+        max-width: 800px; /* para hindi sobrang wide sa desktop */
+        margin: auto;
+    }
 
-        li {
-            margin: 8px 0;
-        }
+    a {
+        display: block; /* full row clickable */
+        margin: 8px 0;
+        padding: 10px;
+        text-decoration: none;
+        background-color: #ADD8E6; /* soft light blue */
+        color: #000;
+        border-radius: 5px;
+        text-align: center;
+    }
 
-        a {
-            text-decoration: none;
-            color: blue;
-        }
+    a:hover {
+        background-color: #90EE90; /* soft green on hover */
+    }
+</style>
     </style>
 </head>
 <body>
 
 <header>
-    <h2>Student Profile</h2>
-    <p>
-        <strong>Complete Name:</strong> Aljomar M. Rebuya<br>
-        <strong>Sex:</strong> Male<br>
-        <strong>Address:</strong> Zone 2, Agpo Lagonoy Camarines Sur<br>
-        <strong>Course / Year / Section:</strong> BSIT 2-D<br>
-        <strong>Name of School:</strong> Partido State University<br>
-        <strong>Semester & AY:</strong> 2nd Semester, AY 2025–2026<br>
-        <strong>Course Code & Title:</strong> PF2-Event Driven Programming<br>
-        <strong>Instructor:</strong> Arjay F. Abio
-    </p>
+    <h1>Student Profile</h1>
 </header>
 
 <section>
-    <h3>Activities</h3>
-    <ul>
-        <li>
-            <a href="https://rebuya23.github.io/GuessTheCountry/" target="_blank">
-                Guess the Flag Game
-            </a>
-        </li>
-        <li>
-            <a href="browser_dashboard.html" target="_blank">
-                Browser Environment Dashboard
-            </a>
-        </li>
-    </ul>
+    <p>Complete Name: Aljomar Rebuya</p>
+    <p>Sex: Male</p>
+    <p>Address: San Pablo City, Laguna</p>
+    <p>Course, Year & Section: BSIT 2-A</p>
+    <p>School: Example University</p>
+    <p>Semester & AY: 2nd Sem, 2025-2026</p>
+    <p>Subject Code & Title: IT101 Web Systems</p>
+    <p>Instructor: Sir Juan Dela Cruz</p>
+</section>
+
+<section>
+    <h2>Activities</h2>
+    <a href="guess_game.html">Guess the Secret Word Game</a>
+    <a href="browser_dashboard.html">Browser Environment Dashboard</a>
 </section>
 
 </body>
 
 </html
+
