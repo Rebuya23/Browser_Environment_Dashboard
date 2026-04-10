@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Interactive Profile</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+img:hover {
+    transform: scale(1.1);
+}
+
+button {
+    margin: 5px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    background: #00c6ff;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #00ffcc;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 8px;
+    margin: 5px 0;
+    background: rgba(255,255,255,0.2);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+li:hover {
+    background: rgba(255,255,255,0.4);
+}
+
+.selected {
+    background: #00ffcc !important;
+    color: black;
+}
+
+input {
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Profile</h2>
+
+<img id="profilePic" src="default-profile.png.jpg">
+<input type="file" id="fileInput" hidden>
+
+<h1 id="name">Aljomar M. Rebuya</h1>
+<button onclick="editText('name')">Edit Name</button>
+
+<p id="bio">BSIT Student | Section BSIT2D | Academic Year 2025-2026</p>
+<button onclick="editText('bio')">Edit Bio</button>
+
+<hr>
+
+<h2>Skills</h2>
+<ul id="skills"></ul>
+<button onclick="addItem('skills')">Add Skill</button>
+<button onclick="deleteSelected('skills')">Delete</button>
+
+<hr>
+
+<h2>Education</h2>
+<div id="education"></div>
+<button onclick="addEducation()">Add Education</button>
+
+<hr>
+
+<h2>Hobbies</h2>
+<ul id="hobbies"></ul>
+<button onclick="addItem('hobbies')">Add Hobby</button>
+<button onclick="deleteSelected('hobbies')">Delete</button>
+
+<hr>
+
+<button onclick="resetData()">Reset</button>
+
+</div>
+
+<script>
+let data = JSON.parse(localStorage.getItem("profile")) || {
+    name: "Aljomar M. Rebuya",
+    bio: "BSIT Student | Section BSIT2D | Academic Year 2025-2026",
+    skills: ["CREATIVE", "THINGS I'M GOOD AT", "WHAT I DO BEST"],
+    hobbies: ["SLEEPING", "LISTENING TO MUSIC", "COOKING"],
+    education: [
+        {
+            school: "Partido State University",
+            course: "Bachelor of Science in Information Technology (BSIT2D)",
+            year: "2025-2026"
+        }
+    ],
+    img: ""
+};
+
+function load() {
+    document.getElementById("name").innerText = data.name;
+    document.getElementById("bio").innerText = data.bio;
+
+    if(data.img) document.getElementById("profilePic").src = data.img;
+
+    renderList("skills", data.skills);
+    renderList("hobbies", data.hobbies);
+    renderEducation();
+}
+
+function save() {
+    localStorage.setItem("profile", JSON.stringify(data));
+}
+
+// EDIT TEXT
+function editText(id) {
+    let el = document.getElementById(id);
+    let input = document.createElement("input");
+    input.value = el.innerText;
+
+    input.onblur = input.onkeydown = function(e){
+        if(e.type === "blur" || e.key === "Enter"){
+            el.innerText = input.value;
+            data[id] = input.value;
+            save();
+            console.log(id + " edited");
+            input.replaceWith(el);
+        }
+    };
+
+    el.replaceWith(input);
+    input.focus();
+}
+
+// IMAGE
+document.getElementById("profilePic").onclick = () => {
+    document.getElementById("fileInput").click();
+};
+
+document.getElementById("fileInput").onchange = function() {
+    let file = this.files[0];
+    if (!file) return;
+
+    let reader = new FileReader();
+
+    reader.onload = function(e){
+        document.getElementById("profilePic").src = e.target.result;
+        data.img = e.target.result;
+        save();
+        console.log("Profile picture updated");
+    };
+
+    reader.readAsDataURL(file);
+};
+
+// RENDER LIST
+function renderList(id, arr) {
+    let ul = document.getElementById(id);
+    ul.innerHTML = "";
+
+    arr.forEach((item, index) => {
+        let li = document.createElement("li");
+        li.innerText = item;
+        li.draggable = true;
+
+        li.onclick = () => {
+            li.classList.toggle("selected");
+            console.log(id + " selected");
+        };
+
+        li.ondragstart = e => {
+            e.dataTransfer.setData("index", index);
+        };
+
+        li.ondragover = e => e.preventDefault();
+
+        li.ondrop = e => {
+            let from = e.dataTransfer.getData("index");
+            let temp = arr[from];
+            arr[from] = arr[index];
+            arr[index] = temp;
+            renderList(id, arr);
+            save();
+        };
+
+        ul.appendChild(li);
+    });
+}
+
+// ADD ITEM
+function addItem(id) {
+    let input = document.createElement("input");
+    document.body.appendChild(input);
+    input.focus();
+
+    input.onkeydown = function(e){
+        if(e.key === "Enter"){
+            data[id].push(input.value);
+            console.log(id + " added: " + input.value);
+            input.remove();
+            renderList(id, data[id]);
+            save();
+        }
+    };
+}
+
+// DELETE
+function deleteSelected(id) {
+    let items = document.querySelectorAll("#" + id + " li.selected");
+    data[id] = data[id].filter((_, i) => !items[i]);
+    console.log(id + " deleted");
+    renderList(id, data[id]);
+    save();
+}
+
+// EDUCATION
+function renderEducation() {
+    let div = document.getElementById("education");
+    div.innerHTML = "";
+
+    data.education.forEach((edu, i) => {
+        let el = document.createElement("div");
+
+        el.innerHTML = `
+        <p contenteditable="true">${edu.school}</p>
+        <p contenteditable="true">${edu.course}</p>
+        <p contenteditable="true">${edu.year}</p>
+        <button onclick="removeEdu(${i})">Delete</button>
+        `;
+
+        div.appendChild(el);
+    });
+}
+
+function addEducation() {
+    data.education.push({school:"New School", course:"Course", year:"Year"});
+    renderEducation();
+    save();
+}
+
+function removeEdu(i) {
+    data.education.splice(i,1);
+    renderEducation();
+    save();
+}
+
+// RESET
+function resetData() {
+    localStorage.clear();
+    location.reload();
+}
+
+// INIT
+load();
+</script>
+
+</body>
+</html>
