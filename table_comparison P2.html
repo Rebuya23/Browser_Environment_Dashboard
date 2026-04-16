@@ -7,7 +7,7 @@
 <style>
 body {
     font-family: Arial;
-    background: linear-gradient(to right, #111827, #374151);
+    background: linear-gradient(to right, #111827, #1E293B);
 }
 
 .container {
@@ -33,8 +33,8 @@ button {
     border-radius: 5px;
     cursor: pointer;
 }
- button:hover {
-    background: #111827;
+button:hover {
+    background: #06B6D4;
     transform: scale(1.05);
 }
 table {
@@ -49,16 +49,10 @@ th, td {
 }
 
 th {
-    background: #374151;
+    background: #020617;
     color: white;
 }
-
-#methodUsed {
-    font-weight: bold;
-    margin-top: 10px;
-}
 </style>
-
 </head>
 
 <body>
@@ -78,12 +72,13 @@ th {
 
 <br><br>
 
-<button onclick="loadInnerHTML()">Load Using (innerHTML)</button>
-<button onclick="loadDOM()">Load Using (DOM Methods)</button>
+<button onclick="loadSampleInnerHTML()">Load Sample (innerHTML)</button>
+<button onclick="loadSampleDOM()">Load Sample (DOM)</button>
 
 <br><br>
 
-<button onclick="testPerformance()">Performance Test</button>
+<button onclick="testInnerHTML()">Test innerHTML</button>
+<button onclick="testDOM()">Test DOM</button>
 
 <button onclick="clearTable()">Clear</button>
 
@@ -92,13 +87,12 @@ th {
 <table>
 <thead>
 <tr>
-<th>Product Name</th>
+<th>Name</th>
 <th>Price</th>
 <th>Category</th>
 <th>Action</th>
 </tr>
 </thead>
-
 <tbody id="tableBody"></tbody>
 </table>
 
@@ -114,16 +108,19 @@ const sampleProducts = [
     { name: "Hoodie Jacket", price: 350, category: "Clothing" }
 ];
 
-function generateProduct(i) {
-    return {
-        name: "Product " + i,
-        price: i * 10,
-        category: "Category " + (i % 5)
-    };
+function generateManyProducts(count) {
+    let products = [];
+    for (let i = 1; i <= count; i++) {
+        products.push({
+            name: "Product " + i,
+            price: Math.floor(Math.random() * 100),
+            category: "Category " + (i % 5 + 1)
+        });
+    }
+    return products;
 }
 
-function loadInnerHTML() {
-    const tbody = document.getElementById("tableBody");
+function loadSampleInnerHTML() {
     let rows = "";
 
     sampleProducts.forEach(p => {
@@ -136,27 +133,29 @@ function loadInnerHTML() {
         </tr>`;
     });
 
-    tbody.innerHTML = rows;
-    document.getElementById("methodUsed").innerText = "Method Used: innerHTML";
+    document.getElementById("tableBody").innerHTML = rows;
 }
 
-function loadDOM() {
-    const tbody = document.getElementById("tableBody");
+function loadSampleDOM() {
+    let tbody = document.getElementById("tableBody");
     tbody.innerHTML = "";
 
     sampleProducts.forEach(p => {
-        const row = document.createElement("tr");
 
-        const td1 = document.createElement("td");
-        const td2 = document.createElement("td");
-        const td3 = document.createElement("td");
-        const td4 = document.createElement("td");
+        let row = document.createElement("tr");
 
+        let td1 = document.createElement("td");
         td1.textContent = p.name;
+
+        let td2 = document.createElement("td");
         td2.textContent = p.price;
+
+        let td3 = document.createElement("td");
         td3.textContent = p.category;
 
-        const btn = document.createElement("button");
+        let td4 = document.createElement("td");
+
+        let btn = document.createElement("button");
         btn.textContent = "Delete";
         btn.onclick = () => row.remove();
 
@@ -169,17 +168,15 @@ function loadDOM() {
 
         tbody.appendChild(row);
     });
-
-    document.getElementById("methodUsed").innerText = "Method Used: DOM Methods";
 }
 
 function addInnerHTML() {
-    const name = document.getElementById("name").value.trim();
-    const price = document.getElementById("price").value.trim();
-    const category = document.getElementById("category").value.trim();
+    let name = document.getElementById("name").value.trim();
+    let price = document.getElementById("price").value.trim();
+    let category = document.getElementById("category").value.trim();
 
     if (!name || !price || !category) {
-        alert("Complete all fields!");
+        alert("Please fill all fields!");
         return;
     }
 
@@ -190,34 +187,34 @@ function addInnerHTML() {
         <td>${category}</td>
         <td><button onclick="this.parentElement.parentElement.remove()">Delete</button></td>
     </tr>`;
-
-    document.getElementById("methodUsed").innerText = "Added using innerHTML";
 }
 
 function addDOM() {
-    const name = document.getElementById("name").value.trim();
-    const price = document.getElementById("price").value.trim();
-    const category = document.getElementById("category").value.trim();
+    let name = document.getElementById("name").value.trim();
+    let price = document.getElementById("price").value.trim();
+    let category = document.getElementById("category").value.trim();
 
     if (!name || !price || !category) {
-        alert("Complete all fields!");
+        alert("Please fill all fields!");
         return;
     }
 
-    const tbody = document.getElementById("tableBody");
+    let tbody = document.getElementById("tableBody");
 
-    const row = document.createElement("tr");
+    let row = document.createElement("tr");
 
-    const td1 = document.createElement("td");
-    const td2 = document.createElement("td");
-    const td3 = document.createElement("td");
-    const td4 = document.createElement("td");
-
+    let td1 = document.createElement("td");
     td1.textContent = name;
+
+    let td2 = document.createElement("td");
     td2.textContent = price;
+
+    let td3 = document.createElement("td");
     td3.textContent = category;
 
-    const btn = document.createElement("button");
+    let td4 = document.createElement("td");
+
+    let btn = document.createElement("button");
     btn.textContent = "Delete";
     btn.onclick = () => row.remove();
 
@@ -229,20 +226,16 @@ function addDOM() {
     row.appendChild(td4);
 
     tbody.appendChild(row);
-
-    document.getElementById("methodUsed").innerText = "Added using DOM";
 }
 
+function testInnerHTML() {
 
-function testPerformance() {
+    let products = generateManyProducts(100);
 
     console.time("innerHTML");
-    let tbody = document.getElementById("tableBody");
+
     let rows = "";
-
-    for (let i = 1; i <= 100; i++) {
-        let p = generateProduct(i);
-
+    products.forEach(p => {
         rows += `
         <tr>
             <td>${p.name}</td>
@@ -250,30 +243,38 @@ function testPerformance() {
             <td>${p.category}</td>
             <td><button>Delete</button></td>
         </tr>`;
-    }
+    });
 
-    tbody.innerHTML = rows;
+    document.getElementById("tableBody").innerHTML = rows;
+
     console.timeEnd("innerHTML");
+}
 
+function testDOM() {
+
+    let products = generateManyProducts(100);
 
     console.time("DOM");
+
+    let tbody = document.getElementById("tableBody");
     tbody.innerHTML = "";
 
-    for (let i = 1; i <= 100; i++) {
-        let p = generateProduct(i);
+    products.forEach(p => {
 
-        const row = document.createElement("tr");
+        let row = document.createElement("tr");
 
-        const td1 = document.createElement("td");
-        const td2 = document.createElement("td");
-        const td3 = document.createElement("td");
-        const td4 = document.createElement("td");
-
+        let td1 = document.createElement("td");
         td1.textContent = p.name;
+
+        let td2 = document.createElement("td");
         td2.textContent = p.price;
+
+        let td3 = document.createElement("td");
         td3.textContent = p.category;
 
-        const btn = document.createElement("button");
+        let td4 = document.createElement("td");
+
+        let btn = document.createElement("button");
         btn.textContent = "Delete";
         btn.onclick = () => row.remove();
 
@@ -285,7 +286,7 @@ function testPerformance() {
         row.appendChild(td4);
 
         tbody.appendChild(row);
-    }
+    });
 
     console.timeEnd("DOM");
 }
