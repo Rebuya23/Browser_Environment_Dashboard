@@ -33,10 +33,11 @@ button {
     border-radius: 5px;
     cursor: pointer;
 }
+
 button:hover {
     background: #06B6D4;
-    transform: scale(1.05);
 }
+
 table {
     width: 100%;
     margin-top: 20px;
@@ -93,6 +94,7 @@ th {
 <th>Action</th>
 </tr>
 </thead>
+
 <tbody id="tableBody"></tbody>
 </table>
 
@@ -120,6 +122,10 @@ function generateManyProducts(count) {
     return products;
 }
 
+function setMethod(msg) {
+    document.getElementById("methodUsed").innerText = msg;
+}
+
 function loadSampleInnerHTML() {
     let rows = "";
 
@@ -134,6 +140,7 @@ function loadSampleInnerHTML() {
     });
 
     document.getElementById("tableBody").innerHTML = rows;
+    setMethod("Method Used: innerHTML (Load Sample)");
 }
 
 function loadSampleDOM() {
@@ -141,7 +148,6 @@ function loadSampleDOM() {
     tbody.innerHTML = "";
 
     sampleProducts.forEach(p => {
-
         let row = document.createElement("tr");
 
         let td1 = document.createElement("td");
@@ -161,22 +167,20 @@ function loadSampleDOM() {
 
         td4.appendChild(btn);
 
-        row.appendChild(td1);
-        row.appendChild(td2);
-        row.appendChild(td3);
-        row.appendChild(td4);
-
+        row.append(td1, td2, td3, td4);
         tbody.appendChild(row);
     });
+
+    setMethod("Method Used: DOM Methods (Load Sample)");
 }
 
 function addInnerHTML() {
-    let name = document.getElementById("name").value.trim();
-    let price = document.getElementById("price").value.trim();
-    let category = document.getElementById("category").value.trim();
+    let name = document.getElementById("name").value;
+    let price = document.getElementById("price").value;
+    let category = document.getElementById("category").value;
 
     if (!name || !price || !category) {
-        alert("Please fill all fields!");
+        alert("Fill all fields!");
         return;
     }
 
@@ -187,19 +191,19 @@ function addInnerHTML() {
         <td>${category}</td>
         <td><button onclick="this.parentElement.parentElement.remove()">Delete</button></td>
     </tr>`;
+
+    setMethod("Method Used: innerHTML");
 }
 
 function addDOM() {
-    let name = document.getElementById("name").value.trim();
-    let price = document.getElementById("price").value.trim();
-    let category = document.getElementById("category").value.trim();
+    let name = document.getElementById("name").value;
+    let price = document.getElementById("price").value;
+    let category = document.getElementById("category").value;
 
     if (!name || !price || !category) {
-        alert("Please fill all fields!");
+        alert("Fill all fields!");
         return;
     }
-
-    let tbody = document.getElementById("tableBody");
 
     let row = document.createElement("tr");
 
@@ -220,16 +224,14 @@ function addDOM() {
 
     td4.appendChild(btn);
 
-    row.appendChild(td1);
-    row.appendChild(td2);
-    row.appendChild(td3);
-    row.appendChild(td4);
+    row.append(td1, td2, td3, td4);
 
-    tbody.appendChild(row);
+    document.getElementById("tableBody").appendChild(row);
+
+    setMethod("Method Used: DOM");
 }
 
 function testInnerHTML() {
-
     let products = generateManyProducts(100);
 
     console.time("innerHTML");
@@ -241,17 +243,18 @@ function testInnerHTML() {
             <td>${p.name}</td>
             <td>${p.price}</td>
             <td>${p.category}</td>
-            <td><button>Delete</button></td>
+            <td><button onclick="this.parentElement.parentElement.remove()">Delete</button></td>
         </tr>`;
     });
 
     document.getElementById("tableBody").innerHTML = rows;
 
     console.timeEnd("innerHTML");
+
+    setMethod("Tested innerHTML ");
 }
 
 function testDOM() {
-
     let products = generateManyProducts(100);
 
     console.time("DOM");
@@ -260,7 +263,6 @@ function testDOM() {
     tbody.innerHTML = "";
 
     products.forEach(p => {
-
         let row = document.createElement("tr");
 
         let td1 = document.createElement("td");
@@ -280,19 +282,18 @@ function testDOM() {
 
         td4.appendChild(btn);
 
-        row.appendChild(td1);
-        row.appendChild(td2);
-        row.appendChild(td3);
-        row.appendChild(td4);
-
+        row.append(td1, td2, td3, td4);
         tbody.appendChild(row);
     });
 
     console.timeEnd("DOM");
+
+    setMethod("Tested DOM");
 }
 
 function clearTable() {
     document.getElementById("tableBody").innerHTML = "";
+    setMethod("Table Cleared");
 }
 
 </script>
