@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Canvas Shape Editor</title>
+
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial;
+            background: hsl(224, 39%, 19%);
+        }
+
+        h1 {
+            background: linear-gradient(90deg, #ffee00, #ff0000);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .header h2 {
+            text-align: center;
+        }
+
+        .header {
+            text-align: left;
+            width: 80%;
+            margin: auto;
+            background: #fafff8;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            border: none;
+            background: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h2>PROFILE INFORMATION</h2>
+    <p><b>Complete Name:</b> Aljomar M. Rebuya</p>
+    <p><b>Sex:</b> Male</p>
+    <p><b>Address:</b> Zone 2, Agpo Lagonoy Camarinrs Sur</p>
+    <p><b>Course/Year/Section:</b> BSIT-2D</p>
+    <p><b>School:</b> Partido State University</p>
+    <p><b>Semester & AY:</b> 2025-2026</p>
+    <p><b>Subject Code and Title:</b> PF2 Event Driven Programming</p>
+    <p><b>Instructor:</b> Arjay F. Abio</p>
+</div>
+
+<h1>Interactive Canvas Shape Editor</h1>
+
+<canvas id="canvas" width="700" height="450"></canvas>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+let circles = [];
+let selectedCircle = null;
+let isDragging = false;
+
+// DRAW FUNCTION
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    circles.forEach(circle => {
+        ctx.beginPath();
+        ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+
+        if (circle === selectedCircle) {
+            ctx.fillStyle = "red";
+        } else {
+            ctx.fillStyle = "blue";
+        }
+
+        ctx.fill();
+        ctx.closePath();
+    });
+}
+
+// CHECK IF CLICKED INSIDE CIRCLE
+function getCircle(x, y) {
+    return circles.find(circle => {
+        let dx = x - circle.x;
+        let dy = y - circle.y;
+        return Math.sqrt(dx * dx + dy * dy) <= circle.radius;
+    });
+}
+
+canvas.addEventListener("mousedown", function(e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const clicked = getCircle(x, y);
+
+    if (clicked) {
+        selectedCircle = clicked;
+        isDragging = true;
+    } else {
+        const newCircle = {
+            x: x,
+            y: y,
+            radius: 20
+        };
+        circles.push(newCircle);
+        selectedCircle = null; newCircle;
+    }
+
+    draw();
+});
+
+// DRAG MOVE
+canvas.addEventListener("mousemove", function(e) {
+    if (isDragging && selectedCircle) {
+        const rect = canvas.getBoundingClientRect();
+        selectedCircle.x = e.clientX - rect.left;
+        selectedCircle.y = e.clientY - rect.top;
+        draw();
+    }
+});
+
+// STOP DRAG
+canvas.addEventListener("mouseup", function() {
+    isDragging = false;
+});
+
+canvas.addEventListener("mouseleave", function() {
+    isDragging = false;
+});
+
+// DELETE KEY
+document.addEventListener("keydown", function(e) {
+    if (e.key === "Delete" && selectedCircle) {
+        circles = circles.filter(c => c !== selectedCircle);
+        selectedCircle = null;
+        draw();
+    }
+});
+
+// RESIZE (SCROLL)
+canvas.addEventListener("wheel", function(e) {
+    if (selectedCircle) {
+        e.preventDefault();
+
+        if (e.deltaY < 0) {
+            selectedCircle.radius += 2;
+        } else {
+            selectedCircle.radius -= 2;
+        }
+
+        if (selectedCircle.radius < 5) {
+            selectedCircle.radius = 5;
+        }
+
+        draw();
+    }
+});
+</script>
+
+</body>
+</html>
+Sent
+Write to
